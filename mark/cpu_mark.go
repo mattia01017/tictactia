@@ -9,14 +9,14 @@ import (
 
 // CpuMove put a symbol for cpu
 func CpuMove(b *board.Board) {
-	// check if cpu is about to win and make move
+	// checks if cpu is about to win and make move
 	l, c := oneLeft(*b, CPU_SYM_VAL)
 	if l != ERR {
 		(*b)[l][c] = CPU_SYM_VAL
 		return
 	}
 
-	//check if user is about to win and make a move
+	//checks if user is about to win and make a move
 	l, c = oneLeft(*b, USER_SYM_VAL)
 	if l != ERR {
 		(*b)[l][c] = CPU_SYM_VAL
@@ -34,15 +34,17 @@ func CpuMove(b *board.Board) {
 	}
 }
 
-// returns coordinates for the only one left
-func oneLeft(b board.Board, who int) (l, c int) {
+// oneLeft returns coordinates for the only empty cell left for winning if
+// it exists, (-1,-1) in other cases
+func oneLeft(b board.Board, player int) (l, c int) {
 	//check lines
 	for l = 0; l < 3; l++ {
 		ml := make(map[int]int)
 		for c = 0; c < 3; c++ {
 			ml[b[l][c]]++
 		}
-		if ml[who] == 2 && ml[0] == 1 {
+		if ml[player] == 2 && ml[0] == 1 {
+			// search the last empty in the selected line
 			for c = 0; c < 3; c++ {
 				if b[l][c] == 0 {
 					return
@@ -57,7 +59,8 @@ func oneLeft(b board.Board, who int) (l, c int) {
 		for l = 0; l < 3; l++ {
 			mc[b[l][c]]++
 		}
-		if mc[who] == 2 && mc[0] == 1 {
+		if mc[player] == 2 && mc[0] == 1 {
+			// search the last empty in the selected column
 			for l = 0; l < 3; l++ {
 				if b[l][c] == 0 {
 					return
@@ -66,21 +69,23 @@ func oneLeft(b board.Board, who int) (l, c int) {
 		}
 	}
 
-	//check diagonal 1
+	//check diagonals
 	md1 := make(map[int]int)
 	md2 := make(map[int]int)
 	for i := 0; i < 3; i++ {
 		md1[b[i][i]]++
 		md2[b[i][2-i]]++
 	}
-	if md1[who] == 2 && md1[0] == 1 {
+	if md1[player] == 2 && md1[0] == 1 {
+		// search the last empty in the first diagonal
 		for i := 0; i < 3; i++ {
 			if b[i][i] == 0 {
 				return i, i
 			}
 		}
 	}
-	if md2[who] == 2 && md2[0] == 1 {
+	if md2[player] == 2 && md2[0] == 1 {
+		// search the last empty in the second diagonal
 		for i := 0; i < 3; i++ {
 			if b[i][2-i] == 0 {
 				return i, 2 - i

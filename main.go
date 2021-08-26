@@ -29,7 +29,8 @@ func main() {
 		for {
 			fmt.Print("Insert a coordinate (line,column): ")
 			fmt.Scanf("%d,%d", &lin, &cin)
-
+			
+			// if the input coordinate is valid, break the loop
 			if mark.PlayerMove(lin, cin, &b) {
 				flush()
 				fmt.Printf("\n%v\n", b)
@@ -39,11 +40,11 @@ func main() {
 			}
 		}
 
-		// check if the player won
+		// check if user won
 		if board.Win(b, USER_SYM_VAL) {
 			fmt.Printf(USER_COLOR, "You won!\n")
 			os.Exit(0)
-			// check if board is full
+		// check if board is full
 		} else if board.IsFull(b) {
 			fmt.Println("No one is the winner...")
 			os.Exit(0)
@@ -51,7 +52,7 @@ func main() {
 
 		// CPU turn
 		fmt.Print("CPU is moving... \n\n")
-		time.Sleep(DELAY)
+		time.Sleep(DELAY)  // wait a moment before making a move
 		flush()
 		mark.CpuMove(&b)
 		fmt.Printf("\n%v\n", b)
@@ -60,7 +61,7 @@ func main() {
 		if board.Win(b, CPU_SYM_VAL) {
 			fmt.Printf(CPU_COLOR, "You lost!\n")
 			os.Exit(0)
-			// check if board is full
+		// check if board is full
 		} else if board.IsFull(b) {
 			fmt.Println("No one is the winner...")
 			os.Exit(0)
@@ -68,7 +69,7 @@ func main() {
 	}
 }
 
-// clear the terminal
+// flush clear the terminal
 func flush() {
 	out, _ := exec.Command("clear").Output()
 	fmt.Print(string(out))

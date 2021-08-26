@@ -20,7 +20,7 @@ aspect:
 3 | x | x | o |
 */
 
-// String method to manage the way the board is printed by fmt functions
+// String method is to manage the way the board is displayed by fmt functions
 func (b Board) String() (out string) {
 	out += "    1   2   3\n"
 	for l := 0; l < 5; l++ {
